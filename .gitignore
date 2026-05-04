@@ -1,0 +1,13 @@
+# Large model result files (NetCDF/GRIB)
+*.nc
+
+# Generated chart outputs
+outputs/
+kim_charts/
+
+# Python cache and virtual environment
+__pycache__/
+*.pyc
+.DS_Store
+venv/
+.venv/

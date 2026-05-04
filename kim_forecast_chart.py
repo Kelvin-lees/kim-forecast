@@ -245,6 +245,25 @@ def plot_single_timestep(ds_t: xr.Dataset, valid_time, init_time, fhour: int,
 
     # ----- (3) 기온 등치선 (빨간 점선) -----
     t2m_smooth = ndimage.gaussian_filter(t2m, sigma=1.5)
+
+    # ----- (3.5) 기온 33도 이상 폭염 구역 빨간 빗금 해칭 -----
+    old_hatch_color = plt.rcParams['hatch.color']
+    old_hatch_lw = plt.rcParams['hatch.linewidth']
+    plt.rcParams['hatch.color'] = 'red'
+    plt.rcParams['hatch.linewidth'] = 0.5
+
+    heat_mask = np.where(t2m_smooth >= 33.0, 1, np.nan)
+    ax.contourf(LON, LAT, heat_mask,
+                levels=[0.5, 1.5],
+                colors="none",
+                hatches=["////"],
+                transform=ccrs.PlateCarree(),
+                zorder=2.5)
+
+    # 원래 설정으로 복구
+    plt.rcParams['hatch.color'] = old_hatch_color
+    plt.rcParams['hatch.linewidth'] = old_hatch_lw
+
     cs_temp = ax.contour(LON, LAT, t2m_smooth,
                          levels=TEMP_LEVELS,
                          colors="red",
@@ -308,10 +327,10 @@ def plot_single_timestep(ds_t: xr.Dataset, valid_time, init_time, fhour: int,
 
     # ----- 범례 (텍스트) -----
     legend_text = (
-        "⛰ Terrain shading: Topography (m)\n"
-        "■ Radar colors & White contour: Precip\n"
+        "■ Color shading & White contour: Precip\n"
         "─ Black solid: MSLP (hPa, 2hPa) / L(Red)\n"
         "┄ Red dashed: Temperature (°C, 3°C)\n"
+        "//// Red hatch: Temp ≥ 33°C\n"
         "··· Navy hatch: Low cloud ≥ 60%\n"
         "↗ Wind barbs: ≥ 5 m/s"
     )
