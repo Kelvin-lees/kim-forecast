@@ -334,9 +334,9 @@ def plot_single_timestep(ds_t: xr.Dataset, valid_time, init_time, fhour: int,
         "··· Navy hatch: Low cloud ≥ 60%\n"
         "↗ Wind barbs: ≥ 5 m/s"
     )
-    ax.text(0.02, 0.02, legend_text,
+    ax.text(0.98, 0.02, legend_text,
             transform=ax.transAxes,
-            fontsize=8, verticalalignment="bottom",
+            fontsize=8, horizontalalignment="right", verticalalignment="bottom",
             bbox=dict(facecolor="white", alpha=0.85,
                       edgecolor="gray", boxstyle="round,pad=0.4"))
 
